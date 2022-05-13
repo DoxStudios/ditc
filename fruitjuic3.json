@@ -1,0 +1,1 @@
+{"name": "FruitJuic3", "health": 120, "hunger": 100, "sanity": 80, "damage multipliers": {"melee": 2, "ranged": 0.5, "spell": 0.25}, "defense multipliers": {"melee": 0.25, "ranged": 0.5, "spell": 1.25}, "current screen": "Catacombs Entrance"}
