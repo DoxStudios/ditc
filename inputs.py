@@ -34,3 +34,7 @@ class InputManager:
                 userInput = len(options) + 1
 
         return userInput
+
+
+    def printResult(self, message):
+        print(f"\n{message}\n")

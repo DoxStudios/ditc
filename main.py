@@ -10,10 +10,9 @@ classManager = classes.ClassManager()
 entityManager = entities.EntityManager()
 screenManager = screens.ScreenManager(inputManager, classManager, entityManager)
 
-player = screenManager.runScreen("Main Menu")
-
-entityManager.player = player
+screenManager.runScreen("Main Menu")
 
 while alive:
+    player = entityManager.player
     screenManager.clear()
     player.currentScreen = screenManager.runScreen(player.currentScreen)
