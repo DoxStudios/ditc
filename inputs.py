@@ -24,7 +24,7 @@ class InputManager:
         while not userInput <= len(options):
             clear()
             print("That is not a valid option. Please enter a number between 1 and ", len(options), "\n")
-            input("Press Enter To Continue")
+            self.pause()
             clear()
             print(prompt, "\n")
             userInput = input(optionText)
@@ -38,3 +38,6 @@ class InputManager:
 
     def printResult(self, message):
         print(f"\n{message}\n")
+
+    def pause(self):
+        input("Press Enter To Continue")

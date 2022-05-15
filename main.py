@@ -2,13 +2,15 @@ import entities
 import classes
 import inputs
 import screens
+import inventory
 
 alive = True
 
 inputManager = inputs.InputManager()
 classManager = classes.ClassManager()
 entityManager = entities.EntityManager()
-screenManager = screens.ScreenManager(inputManager, classManager, entityManager)
+inventoryManager = inventory.InventoryManager(entityManager)
+screenManager = screens.ScreenManager(inputManager, classManager, entityManager, inventoryManager)
 
 screenManager.runScreen("Main Menu")
 

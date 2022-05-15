@@ -1,5 +1,6 @@
 import json
 import os
+from select import select
 
 def clear():
     os.system(['clear','cls'][os.name == 'nt'])
@@ -15,9 +16,9 @@ class Screen:
     def run(self):
         print("This screen hasn't been properly configured! This should be fixed soon.")
 
-    def settings(self, previousScreen):
+    def options(self, previousScreen):
         clear()
-        selection = self.InputManager.getInput("Settings", ["1: Save", "2: Go To Main Menu", "3: Go Back"])
+        selection = self.InputManager.getInput("Options", ["1: Save", "2: Go To Main Menu", "3: Go Back"])
         if selection == 1:
             return self.saveCharacter(previousScreen)
         if selection == 2:
@@ -29,7 +30,7 @@ class Screen:
         playerData = self.EntityManager.player.getStats()
         with open(self.EntityManager.player.name.lower() + ".json", 'w') as saveFile:
             json.dump(playerData, saveFile)
-        return self.settings(previousScreen)
+        return self.options(previousScreen)
 
     def createCharacter(self):
         clear()
@@ -60,7 +61,7 @@ class Screen:
             
         except:
             print("That character does not exist or contains invalid data.")
-            input("Press Enter To Continue")
+            self.InputManager.pause()
             return self.getCharacterName()
 
 
@@ -85,15 +86,25 @@ class CatacombsEntrance(Screen):
         if selection == 2:
             return "Right Tunnel"
         if selection == 3:
-            return self.settings("Catacombs Entrance")
+            return self.options("Catacombs Entrance")
 
 class LeftTunnel(Screen):
     def run(self):
         selection = self.InputManager.getInput(self.prompt, self.options)
         if selection == 1:
             self.InputManager.printResult("You attack the goblin and defeat it, but you decide to retread back to the entrance.")
-            input("Press Enter To Continue")
+            
             return "Catacombs Entrance"
+        if selection == 2:
+            self.InputManager.printResult("You sneak around the goblin and continue on your way.")
+            self.InputManager.pause()
+            return "Dark Room"
+        if selection == 3:
+            return self.options("Left Tunnel")
+
+class RightTunnel(Screen):
+    def run(self):
+        selection = self.InputManager.getInput(self.prompt, self.options)
 
 class ScreenManager:
     def __init__(self, InputManager, ClassManager, EntityManager):
@@ -104,8 +115,9 @@ class ScreenManager:
 
         self.screens = {
             "Main Menu": MainMenu("Main Menu", ["1: Create Character", "2: Load Character", "3: Exit"], self.InputManager, self.ClassManager, self.EntityManager),
-            "Catacombs Entrance": CatacombsEntrance("Catacombs Entrance", ["1: Enter catacombs through left tunnel", "2: Enter catacombs through right tunnel", "3: Settings"], self.InputManager, self.ClassManager, self.EntityManager),
-            "Left Tunnel": LeftTunnel("You go down the left tunnel and encounter a goblin", ["1: Fight goblin"], self.InputManager, self.ClassManager, self.EntityManager)
+            "Catacombs Entrance": CatacombsEntrance("Catacombs Entrance", ["1: Enter catacombs through left tunnel", "2: Enter catacombs through right tunnel", "3: Options"], self.InputManager, self.ClassManager, self.EntityManager),
+            "Left Tunnel": LeftTunnel("You go down the left tunnel and encounter a goblin", ["1: Fight goblin", "2: Avoid goblin", "3: Options"], self.InputManager, self.ClassManager, self.EntityManager),
+            "Right Tunnel": RightTunnel("You go down right tunnel and find your path blocked by a tomb.", ["1: Go around", "2: Loot", "3: Options"], self.InputManager, self.ClassManager, self.EntityManager)
         }
 
     def runScreen(self, screenName):
