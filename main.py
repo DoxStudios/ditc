@@ -17,4 +17,5 @@ screenManager.runScreen("Main Menu")
 while alive:
     player = entityManager.player
     screenManager.clear()
+    print(inventoryManager.getWeaponInventory())
     player.currentScreen = screenManager.runScreen(player.currentScreen)

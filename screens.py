@@ -6,17 +6,18 @@ def clear():
     os.system(['clear','cls'][os.name == 'nt'])
 
 class Screen:
-    def __init__(self, prompt, options, InputManager, ClassManager, EntityManager):
+    def __init__(self, prompt, options, InputManager, ClassManager, EntityManager, InventoryManager):
         self.prompt = prompt
         self.options = options
         self.InputManager = InputManager
         self.ClassManager = ClassManager
         self.EntityManager = EntityManager
+        self.InventoryManager = InventoryManager
 
     def run(self):
         print("This screen hasn't been properly configured! This should be fixed soon.")
 
-    def options(self, previousScreen):
+    def sett(self, previousScreen):
         clear()
         selection = self.InputManager.getInput("Options", ["1: Save", "2: Go To Main Menu", "3: Go Back"])
         if selection == 1:
@@ -30,14 +31,14 @@ class Screen:
         playerData = self.EntityManager.player.getStats()
         with open(self.EntityManager.player.name.lower() + ".json", 'w') as saveFile:
             json.dump(playerData, saveFile)
-        return self.options(previousScreen)
+        return self.sett(previousScreen)
 
     def createCharacter(self):
         clear()
         playerName = input("Enter a name for your character\n")
         clear()
         playerClass = self.ClassManager.getClass(self.InputManager.getInput("Please Select A Class", ["1: Barabarian", "2: Archer", "3: Temp"]))
-        player = self.EntityManager.createPlayerEntity(playerName, 100 + playerClass.healthBuff, 100 + playerClass.hungerBuff, 100 + playerClass.sanityBuff, playerClass.damageMultipliers, playerClass.defense, "Catacombs Entrance")
+        player = self.EntityManager.createPlayerEntity(playerName, 100 + playerClass.healthBuff, 100 + playerClass.hungerBuff, 100 + playerClass.sanityBuff, playerClass.damageMultipliers, playerClass.defense, "Catacombs Entrance", [], [])
         self.EntityManager.player = player
         return player.currentScreen
 
@@ -55,7 +56,7 @@ class Screen:
         try:
             with open(characterName.lower() + '.json', 'r') as saveFile:
                 saveData = json.load(saveFile)
-            player = self.EntityManager.createPlayerEntity(saveData["name"], saveData["health"], saveData["hunger"], saveData["sanity"], saveData["damage multipliers"], saveData["defense multipliers"], saveData["current screen"])
+            player = self.EntityManager.createPlayerEntity(saveData["name"], saveData["health"], saveData["hunger"], saveData["sanity"], saveData["damage multipliers"], saveData["defense multipliers"], saveData["current screen"], saveData["weapon inventory"], saveData["pet inventory"])
             self.EntityManager.player = player
             return player.currentScreen
             
@@ -82,42 +83,44 @@ class CatacombsEntrance(Screen):
     def run(self):
         selection = self.InputManager.getInput(self.prompt, self.options)
         if selection == 1:
+            self.InventoryManager.addWeapon("Item2")
             return "Left Tunnel"
         if selection == 2:
             return "Right Tunnel"
         if selection == 3:
-            return self.options("Catacombs Entrance")
+            return self.sett("Catacombs Entrance")
 
 class LeftTunnel(Screen):
     def run(self):
         selection = self.InputManager.getInput(self.prompt, self.options)
         if selection == 1:
             self.InputManager.printResult("You attack the goblin and defeat it, but you decide to retread back to the entrance.")
-            
+            self.InputManager.pause()
             return "Catacombs Entrance"
         if selection == 2:
             self.InputManager.printResult("You sneak around the goblin and continue on your way.")
             self.InputManager.pause()
             return "Dark Room"
         if selection == 3:
-            return self.options("Left Tunnel")
+            return self.sett("Left Tunnel")
 
 class RightTunnel(Screen):
     def run(self):
         selection = self.InputManager.getInput(self.prompt, self.options)
 
 class ScreenManager:
-    def __init__(self, InputManager, ClassManager, EntityManager):
+    def __init__(self, InputManager, ClassManager, EntityManager, InventoryManager):
         
         self.InputManager = InputManager
         self.ClassManager = ClassManager
         self.EntityManager = EntityManager
+        self.InventoryManager = InventoryManager
 
         self.screens = {
-            "Main Menu": MainMenu("Main Menu", ["1: Create Character", "2: Load Character", "3: Exit"], self.InputManager, self.ClassManager, self.EntityManager),
-            "Catacombs Entrance": CatacombsEntrance("Catacombs Entrance", ["1: Enter catacombs through left tunnel", "2: Enter catacombs through right tunnel", "3: Options"], self.InputManager, self.ClassManager, self.EntityManager),
-            "Left Tunnel": LeftTunnel("You go down the left tunnel and encounter a goblin", ["1: Fight goblin", "2: Avoid goblin", "3: Options"], self.InputManager, self.ClassManager, self.EntityManager),
-            "Right Tunnel": RightTunnel("You go down right tunnel and find your path blocked by a tomb.", ["1: Go around", "2: Loot", "3: Options"], self.InputManager, self.ClassManager, self.EntityManager)
+            "Main Menu": MainMenu("Main Menu", ["1: Create Character", "2: Load Character", "3: Exit"], self.InputManager, self.ClassManager, self.EntityManager, self.InventoryManager),
+            "Catacombs Entrance": CatacombsEntrance("Catacombs Entrance", ["1: Enter catacombs through left tunnel", "2: Enter catacombs through right tunnel", "3: Options"], self.InputManager, self.ClassManager, self.EntityManager, self.InventoryManager),
+            "Left Tunnel": LeftTunnel("You go down the left tunnel and encounter a goblin", ["1: Fight goblin", "2: Avoid goblin", "3: Options"], self.InputManager, self.ClassManager, self.EntityManager, self.InventoryManager),
+            "Right Tunnel": RightTunnel("You go down right tunnel and find your path blocked by a tomb.", ["1: Go around", "2: Loot", "3: Options"], self.InputManager, self.ClassManager, self.EntityManager, self.InventoryManager)
         }
 
     def runScreen(self, screenName):

@@ -1,5 +1,5 @@
 class Entity:
-    def __init__(self, name, health, hunger, sanity, damageMultipliers, defense, currentScreen):
+    def __init__(self, name, health, hunger, sanity, damageMultipliers, defense, currentScreen, weaponInventory, petInventory):
         self.name = name
         self.health = health
         self.hunger = hunger
@@ -7,6 +7,10 @@ class Entity:
         self.damageMultipliers = damageMultipliers
         self.defense = defense
         self.currentScreen = currentScreen
+        self.weaponInventory = weaponInventory
+        self.petInventory = petInventory
+        self.weaponNames = []
+        self.petNames = []
 
     def damage(self, damage, damageType):
         self.health -= damage * self.defenseValues[damageType]
@@ -24,7 +28,9 @@ class Player(Entity):
             "sanity": self.sanity,
             "damage multipliers": self.damageMultipliers,
             "defense multipliers": self.defense,
-            "current screen": self.currentScreen
+            "current screen": self.currentScreen,
+            "weapon inventory": self.weaponInventory,
+            "pet inventory": self.petInventory
         }
 
         return stats
@@ -33,8 +39,8 @@ class Player(Entity):
 class EntityManager:
 
     def __init__(self):
-        self.player = Player("Player", 100, 100, 100, {"melee": 1, "ranged": 1, "spell": 1}, {"melee": 1, "ranged": 1, "spell": 1}, "Catacombs Entrance")
+        self.player = Player("Player", 100, 100, 100, {"melee": 1, "ranged": 1, "spell": 1}, {"melee": 1, "ranged": 1, "spell": 1}, "Catacombs Entrance", [], [])
 
-    def createPlayerEntity(self, name, health, hunger, sanity, damageMultipliers, defense, currentScreen):
-        player = Player(name, health, hunger, sanity, damageMultipliers, defense, currentScreen)
+    def createPlayerEntity(self, name, health, hunger, sanity, damageMultipliers, defense, currentScreen, weaponInventory, petInventory):
+        player = Player(name, health, hunger, sanity, damageMultipliers, defense, currentScreen, weaponInventory, petInventory)
         return player
