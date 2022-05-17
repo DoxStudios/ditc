@@ -9,8 +9,6 @@ class Entity:
         self.currentScreen = currentScreen
         self.weaponInventory = weaponInventory
         self.petInventory = petInventory
-        self.weaponNames = []
-        self.petNames = []
 
     def damage(self, damage, damageType):
         self.health -= damage * self.defenseValues[damageType]
@@ -20,7 +18,17 @@ class Player(Entity):
         card = f"Character Name: {self.name}\n\nHealth: {self.health}\n\nHunger: {self.hunger}\n\nSanity {self.sanity}\n"
         return card
 
+    def getInventoryForSaving(self):
+        weapons = self.weaponInventory
+        pets = self.petInventory
+
+        weapons = [i.name for i in weapons]
+        pets = [i.name for i in pets]
+
+        return (weapons, pets)
+
     def getStats(self):
+        weaponNames, petNames = self.getInventoryForSaving()
         stats = {
             "name": self.name,
             "health": self.health,
@@ -29,8 +37,8 @@ class Player(Entity):
             "damage multipliers": self.damageMultipliers,
             "defense multipliers": self.defense,
             "current screen": self.currentScreen,
-            "weapon inventory": self.weaponInventory,
-            "pet inventory": self.petInventory
+            "weapon inventory": weaponNames,
+            "pet inventory": petNames
         }
 
         return stats

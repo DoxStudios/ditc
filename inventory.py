@@ -6,8 +6,11 @@ class Item:
 class ItemManager:
     def __init__(self):
         self.Items = {
-            "Item": Item("Item", True),
-            "Item2": Item("Item but better", False)
+            "Item": Item("Item", True)
+        }
+
+        self.Pets = {
+            "Pet": Item("Pet", False)
         }
 
 class InventoryManager:
@@ -17,6 +20,23 @@ class InventoryManager:
 
     def getWeaponInventory(self):
         return self.entityManager.player.weaponInventory
+
+    def getWeapons(self):
+        weapons = [f"Slot {i + 1}: {self.getWeaponInventory()[i].name}" for i in range(len(self.getWeaponInventory()))]
+        card = ""
+        for i in weapons:
+            card += i + "\n"
+
+        return card
+
+    def getPets(self):
+        pets = [f"Slot {i + 1}: {self.getPetInventory()[i].name}" for i in range(len(self.getPetInventory()))]
+        card = ""
+        for i in pets:
+            card += i + "\n"
+
+        return card
+        
     
     def getPetInventory(self):
         return self.entityManager.player.petInventory
@@ -27,3 +47,14 @@ class InventoryManager:
         if item.canHaveMultiple:
             weaponInventory.append(item)
         else:
+            if not item in weaponInventory:
+                weaponInventory.append(item)
+
+    def addPet(self, petName):
+        petInvetory = self.getPetInventory()
+        pet = self.itemManager.Pets[petName]
+        if pet.canHaveMultiple:
+            petInvetory.append(pet)
+        else:
+            if not pet in petInvetory:
+                petInvetory.append(pet)

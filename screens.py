@@ -56,8 +56,12 @@ class Screen:
         try:
             with open(characterName.lower() + '.json', 'r') as saveFile:
                 saveData = json.load(saveFile)
-            player = self.EntityManager.createPlayerEntity(saveData["name"], saveData["health"], saveData["hunger"], saveData["sanity"], saveData["damage multipliers"], saveData["defense multipliers"], saveData["current screen"], saveData["weapon inventory"], saveData["pet inventory"])
+            player = self.EntityManager.createPlayerEntity(saveData["name"], saveData["health"], saveData["hunger"], saveData["sanity"], saveData["damage multipliers"], saveData["defense multipliers"], saveData["current screen"], [], [])
             self.EntityManager.player = player
+            for i in saveData["weapon inventory"]:
+                self.InventoryManager.addWeapon(i)
+            for i in saveData["pet inventory"]:
+                self.InventoryManager.addPet(i)
             return player.currentScreen
             
         except:
@@ -83,7 +87,7 @@ class CatacombsEntrance(Screen):
     def run(self):
         selection = self.InputManager.getInput(self.prompt, self.options)
         if selection == 1:
-            self.InventoryManager.addWeapon("Item2")
+            self.InventoryManager.addWeapon("Item")
             return "Left Tunnel"
         if selection == 2:
             return "Right Tunnel"
