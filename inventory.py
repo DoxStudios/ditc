@@ -8,11 +8,12 @@ class Item:
 class ItemManager:
     def __init__(self):
         self.Items = {
-            "Rusty Knife": Item("Rusty Knife", damage=2, damageType="melee")
+            "Rusty Knife": Item("Rusty Knife", damage=2, damageType="melee"),
+            "Silver Sword": Item("Silver Sword", damage=5, damageType="melee")
         }
 
         self.Pets = {
-            "Pet": Item("Pet", False)
+            "Dark Sludge": Item("Dark Sludge", False)
         }
 
 class InventoryManager:

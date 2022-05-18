@@ -1,5 +1,5 @@
 class Entity:
-    def __init__(self, name, health, hunger, sanity, damageMultipliers, defense, currentScreen, weaponInventory, petInventory):
+    def __init__(self, name, health, hunger, sanity, damageMultipliers, defense, currentScreen, canEncounter, weaponInventory, petInventory):
         self.name = name
         self.health = health
         self.hunger = hunger
@@ -7,6 +7,7 @@ class Entity:
         self.damageMultipliers = damageMultipliers
         self.defense = defense
         self.currentScreen = currentScreen
+        self.canEncounter = canEncounter
         self.weaponInventory = weaponInventory
         self.petInventory = petInventory
 
@@ -37,6 +38,7 @@ class Player(Entity):
             "damage multipliers": self.damageMultipliers,
             "defense multipliers": self.defense,
             "current screen": self.currentScreen,
+            "can encounter": self.canEncounter,
             "weapon inventory": weaponNames,
             "pet inventory": petNames
         }
@@ -47,8 +49,8 @@ class Player(Entity):
 class EntityManager:
 
     def __init__(self):
-        self.player = Player("Player", 100, 100, 100, {"melee": 1, "ranged": 1, "spell": 1}, {"melee": 1, "ranged": 1, "spell": 1}, "Catacombs Entrance", [], [])
+        self.player = Player("Player", 100, 100, 100, {"melee": 1, "ranged": 1, "spell": 1}, {"melee": 1, "ranged": 1, "spell": 1}, "Catacombs Entrance", False, [], [])
 
-    def createPlayerEntity(self, name, health, hunger, sanity, damageMultipliers, defense, currentScreen, weaponInventory, petInventory):
-        player = Player(name, health, hunger, sanity, damageMultipliers, defense, currentScreen, weaponInventory, petInventory)
+    def createPlayerEntity(self, name, health, hunger, sanity, damageMultipliers, defense, currentScreen, canEncounter, weaponInventory, petInventory):
+        player = Player(name, health, hunger, sanity, damageMultipliers, defense, currentScreen, canEncounter, weaponInventory, petInventory)
         return player
