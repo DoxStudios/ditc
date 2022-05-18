@@ -1,12 +1,14 @@
 class Item:
-    def __init__(self, name, canHaveMultiple):
+    def __init__(self, name, canHaveMultiple=True, damage=None, damageType=None):
         self.name = name
         self.canHaveMultiple = canHaveMultiple
+        self.damage = damage
+        self.damageType = damageType
 
 class ItemManager:
     def __init__(self):
         self.Items = {
-            "Item": Item("Item", True)
+            "Rusty Knife": Item("Rusty Knife", damage=2, damageType="melee")
         }
 
         self.Pets = {
@@ -22,24 +24,31 @@ class InventoryManager:
         return self.entityManager.player.weaponInventory
 
     def getWeapons(self):
-        weapons = [f"Slot {i + 1}: {self.getWeaponInventory()[i].name}" for i in range(len(self.getWeaponInventory()))]
+        weapons = [f"Slot {i + 1}: {self.getWeaponInventory()[i].name} - {self.getWeaponInventory()[i].damage} damage" for i in range(len(self.getWeaponInventory()))]
+        
+        if len(weapons) == 0:
+            return "None\n"
+        
         card = ""
         for i in weapons:
             card += i + "\n"
 
         return card
 
+    def getPetInventory(self):
+        return self.entityManager.player.petInventory
+
     def getPets(self):
         pets = [f"Slot {i + 1}: {self.getPetInventory()[i].name}" for i in range(len(self.getPetInventory()))]
+
+        if len(pets) == 0:
+            return "None\n"
+
         card = ""
         for i in pets:
             card += i + "\n"
 
         return card
-        
-    
-    def getPetInventory(self):
-        return self.entityManager.player.petInventory
 
     def addWeapon(self, itemName):
         weaponInventory = self.getWeaponInventory()

@@ -1,6 +1,5 @@
 import json
 import os
-from select import select
 
 def clear():
     os.system(['clear','cls'][os.name == 'nt'])
@@ -17,22 +16,25 @@ class Screen:
     def run(self):
         print("This screen hasn't been properly configured! This should be fixed soon.")
 
-    def sett(self, previousScreen):
+    def settings(self, previousScreen):
         clear()
-        selection = self.InputManager.getInput("Options", ["1: Save", "2: Go To Main Menu", "3: Go Back"])
+        selection = self.InputManager.getInput("Options", ["1: Save", "2: View Inventory", "3: Go To Main Menu", "4: Go Back"])
         if selection == 1:
-            return self.saveCharacter(previousScreen)
+            self.saveCharacter()
+            return previousScreen
         if selection == 2:
-            return "Main Menu"
+            self.viewInventory()
+            return previousScreen
         if selection == 3:
+            return "Main Menu"
+        if selection == 4:
             return previousScreen
 
-    def saveCharacter(self, previousScreen):
+    def saveCharacter(self):
         playerData = self.EntityManager.player.getStats()
         with open(self.EntityManager.player.name.lower() + ".json", 'w') as saveFile:
             json.dump(playerData, saveFile)
-        return self.sett(previousScreen)
-
+        
     def createCharacter(self):
         clear()
         playerName = input("Enter a name for your character\n")
@@ -69,6 +71,14 @@ class Screen:
             self.InputManager.pause()
             return self.getCharacterName()
 
+    def viewInventory(self):
+        clear()
+        print("Weapons:")
+        print(self.InventoryManager.getWeapons())
+        print("Pets:")
+        print(self.InventoryManager.getPets())
+        self.InputManager.pause()
+
 
 
 class MainMenu(Screen):
@@ -80,6 +90,7 @@ class MainMenu(Screen):
         if selection == 2:
             return self.getCharacterName()
         if selection == 3:
+            clear()
             exit()
 
         
@@ -87,12 +98,11 @@ class CatacombsEntrance(Screen):
     def run(self):
         selection = self.InputManager.getInput(self.prompt, self.options)
         if selection == 1:
-            self.InventoryManager.addWeapon("Item")
             return "Left Tunnel"
         if selection == 2:
             return "Right Tunnel"
         if selection == 3:
-            return self.sett("Catacombs Entrance")
+            return self.settings("Catacombs Entrance")
 
 class LeftTunnel(Screen):
     def run(self):
@@ -106,11 +116,23 @@ class LeftTunnel(Screen):
             self.InputManager.pause()
             return "Dark Room"
         if selection == 3:
-            return self.sett("Left Tunnel")
+            return self.settings("Left Tunnel")
 
 class RightTunnel(Screen):
     def run(self):
         selection = self.InputManager.getInput(self.prompt, self.options)
+        if selection == 1:
+            self.InputManager.printResult("You go around the tomb and continue on your way.")
+            self.InputManager.pause()
+            return "Dark Room"
+        if selection == 2:
+            self.InputManager.printResult("You find a Rusty Knife and go around the tomb.")
+            self.InventoryManager.addWeapon("Rusty Knife")
+            self.InputManager.pause()
+            return "Dark Room"
+        if selection == 3:
+            return self.settings("Right Tunnel")
+        
 
 class ScreenManager:
     def __init__(self, InputManager, ClassManager, EntityManager, InventoryManager):

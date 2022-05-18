@@ -20,7 +20,10 @@ class InputManager:
         try:
             userInput = int(userInput)
         except:
-            userInput = 0
+            userInput = len(options) + 1
+
+        if userInput == 0:
+            userInput = len(options) + 1
 
         while not userInput <= len(options):
             clear()
@@ -32,13 +35,17 @@ class InputManager:
             try:
                 userInput = int(userInput)
             except:
-                userInput = 0
+                userInput = len(options) + 1
+
+            if userInput == 0:
+                userInput = len(options) + 1
 
         return userInput
 
 
     def printResult(self, message):
-        print(f"\n{message}\n")
+        clear()
+        print(f"{message}\n")
 
     def pause(self):
         print("Press Any Key To Continue")
