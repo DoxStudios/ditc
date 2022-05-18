@@ -27,8 +27,8 @@ class Player:
         weapons = self.weaponInventory
         pets = self.petInventory
 
-        weapons = [i.name for i in weapons]
-        pets = [i.name for i in pets]
+        weapons = [i.id for i in weapons]
+        pets = [i.id for i in pets]
 
         return (weapons, pets)
 

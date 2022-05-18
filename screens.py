@@ -1,6 +1,5 @@
 import json
 import random
-from re import L
 from inputs import clear
 
 def chance(percent):
@@ -8,6 +7,8 @@ def chance(percent):
         return True
     else:
         return False
+
+debug=False
 
 class Screen:
     def __init__(self, prompt, options, InputManager, ClassManager, EntityManager, InventoryManager):
@@ -70,9 +71,13 @@ class Screen:
             for i in saveData["pet inventory"]:
                 self.InventoryManager.addPet(i)
             return player.currentScreen
-            
-        except:
+             
+        except Exception as E:
             print("That character does not exist or contains invalid data.")
+
+            if debug:
+                print("Error: " + str(E))
+
             self.InputManager.pause()
             return self.getCharacterName()
 
