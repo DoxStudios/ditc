@@ -1,25 +1,28 @@
 class Item:
-    def __init__(self, name, id, canHaveMultiple, damage, damageType):
+    def __init__(self, name, id, canHaveMultiple, damage, damageType, sellPrice, buyPrice, exchangeable):
         self.name = name
         self.id = id
         self.canHaveMultiple = canHaveMultiple
         self.damage = damage
         self.damageType = damageType
+        self.sellPrice = sellPrice
+        self.buyPrice = buyPrice
+        self.exchangeable = exchangeable
 
 class ItemManager:
     def __init__(self):
         self.Items = {
-            "rusty_knife": Item("Rusty Knife", "rusty_knife", True, 2, "melee"),
-            "silver_sword": Item("Silver Sword", "silver_sword", True, 5, "melee"),
-            "glowing_sword": Item("Glowing Sword", "glowing_sword", True, 9, "melee"),
-            "shiny_dagger": Item("Shiny Dagger", "shiny_dagger", True, 4, "melee")
+            "rusty_knife": Item("Rusty Knife", "rusty_knife", True, 2, "melee", 2, 2, True),
+            "silver_sword": Item("Silver Sword", "silver_sword", True, 5, "melee", 0, 0, True),
+            "glowing_sword": Item("Glowing Sword", "glowing_sword", True, 9, "melee", 5, 5, True),
+            "shiny_dagger": Item("Shiny Dagger", "shiny_dagger", True, 4, "melee", 4, 4, True)
         }
 
         self.Pets = {
-            "dark_sludge_pet": Item("Dark Sludge Pet", "dark_sludge_pet", False, 2, "spell"),
-            "dox_pet": Item("Dox Pet", "dox_pet", False, 3, "ranged"),
-            "dragon_fruit_pet": Item("Dragon Fruit Pet", "dragon_fruit_pet", False, 8, "static"),
-            "spirit_pet": Item("Spirit Pet", "spirit_pet", False, 4, "spell")
+            "dark_sludge_pet": Item("Dark Sludge Pet", "dark_sludge_pet", False, 2, "spell", 0, 0, False),
+            "dox_pet": Item("Dox Pet", "dox_pet", False, 3, "ranged", 0, 0, False),
+            "dragon_fruit_pet": Item("Dragon Fruit Pet", "dragon_fruit_pet", False, 8, "static", 0, 0, False),
+            "spirit_pet": Item("Spirit Pet", "spirit_pet", False, 4, "spell", 0, 0, False)
         }
 
 class InventoryManager:
