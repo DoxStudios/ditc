@@ -391,7 +391,8 @@ class ScreenManager:
             "Shady Alley Man": ShadyAlleyMan("I know my way around the catacombs better than anyone else. I can help you between the layers.", [], self.InputManager, self.ClassManager, self.EntityManager, self.InventoryManager),
             "Weaponsmith": Weaponsmith("You greet the weaponsmith and take a look around his shop.", ["1: Negotiate for a Glowing Sword, 40% chance for him to accept", "2: Steal a Shiny Dagger", "3: Options"], self.InputManager, self.ClassManager, self.EntityManager, self.InventoryManager),
             "Pet Keeper": PetKeeper("You go into the pet keeper's shop and say hello.", ["1: Get a random pet from the upper floors", "2: Befriend the pet keeper", "3: Options"], self.InputManager, self.ClassManager, self.EntityManager, self.InventoryManager),
-            "Village Center Trapdoor": VillageCenterTrapdoor("You find yourself at a trapdoor in the center of the village.", ["1: Open the trapdoor and go down the ladder underneath", "2: Walk away into the village", "3: Options"], self.InputManager, self.ClassManager, self.EntityManager, self.InventoryManager)
+            "Village Center Trapdoor": VillageCenterTrapdoor("You find yourself at a trapdoor in the center of the village.", ["1: Open the trapdoor and go down the ladder underneath", "2: Walk away into the village", "3: Options"], self.InputManager, self.ClassManager, self.EntityManager, self.InventoryManager),
+            "Flooded Catacombs": FloodedCatacombs("", [], self.InputManager, self.ClassManager, self.EntityManager, self.InventoryManager)
         }
 
     def runScreen(self, screenName):
