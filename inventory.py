@@ -9,11 +9,16 @@ class ItemManager:
     def __init__(self):
         self.Items = {
             "Rusty Knife": Item("Rusty Knife", damage=2, damageType="melee"),
-            "Silver Sword": Item("Silver Sword", damage=5, damageType="melee")
+            "Silver Sword": Item("Silver Sword", damage=5, damageType="melee"),
+            "Glowing Sword": Item("Glowing Sword", damage=9, damageType="melee"),
+            "Shiny Dagger": Item("Shiny Dagger", damage=4, damageType="melee")
         }
 
         self.Pets = {
-            "Dark Sludge": Item("Dark Sludge", False)
+            "Dark Sludge": Item("Dark Sludge", False, 2, "spell"),
+            "Dox Pet": Item("Dox Pet", False, 3, "ranged"),
+            "Dragon Fruit Pet": Item("Dragon Fruit Pet", False, 8, "static"),
+            "Spirit Pet": Item("Spirit Pet", False, 4, "spell")
         }
 
 class InventoryManager:

@@ -15,6 +15,7 @@ class Barbarian:
         self.healthBuff = 20
         self.hungerBuff = 0
         self.sanityBuff = -20
+        self.addedDamage = 10
 
 class Archer:
     def __init__(self):
@@ -33,8 +34,9 @@ class Archer:
         self.healthBuff = 0
         self.hungerBuff = 20
         self.sanityBuff = 20
+        self.addedDamage = 5
 
-class Temp2:
+class Temp:
     def __init__(self):
         self.damageMultipliers = {
             "melee": 2,
@@ -51,6 +53,7 @@ class Temp2:
         self.healthBuff = 20
         self.hungerBuff = 0
         self.sanityBuff = -20
+        self.addedDamage = 10
 
 
 
@@ -61,7 +64,7 @@ class ClassManager:
         self.classes = {
             "1": Barbarian(),
             "2": Archer(),
-            "3": Temp2()
+            "3": Temp()
         }
         
 

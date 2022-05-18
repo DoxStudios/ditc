@@ -1,5 +1,12 @@
 import json
+import random
 from inputs import clear
+
+def chance(percent):
+    if random.randint(0, 100) < percent:
+        return True
+    else:
+        return False
 
 class Screen:
     def __init__(self, prompt, options, InputManager, ClassManager, EntityManager, InventoryManager):
@@ -37,7 +44,7 @@ class Screen:
         playerName = input("Enter a name for your character\n")
         clear()
         playerClass = self.ClassManager.getClass(self.InputManager.getInput("Please Select A Class", ["1: Barabarian", "2: Archer", "3: Temp"]))
-        player = self.EntityManager.createPlayerEntity(playerName, 100 + playerClass.healthBuff, 100 + playerClass.hungerBuff, 100 + playerClass.sanityBuff, playerClass.damageMultipliers, playerClass.defense, "Catacombs Entrance", False, [], [])
+        player = self.EntityManager.createPlayerEntity(playerName, 100 + playerClass.healthBuff, 100 + playerClass.hungerBuff, 100 + playerClass.sanityBuff, playerClass.damageMultipliers, playerClass.addedDamage, playerClass.defense, "Catacombs Entrance", False, [], [], [])
         self.EntityManager.player = player
         return player.currentScreen
 
@@ -55,7 +62,7 @@ class Screen:
         try:
             with open(characterName.lower() + '.json', 'r') as saveFile:
                 saveData = json.load(saveFile)
-            player = self.EntityManager.createPlayerEntity(saveData["name"], saveData["health"], saveData["hunger"], saveData["sanity"], saveData["damage multipliers"], saveData["defense multipliers"], saveData["current screen"], saveData["can encounter"], [], [])
+            player = self.EntityManager.createPlayerEntity(saveData["name"], saveData["health"], saveData["hunger"], saveData["sanity"], saveData["damage multipliers"], saveData["added damage"], saveData["defense multipliers"], saveData["current screen"], saveData["can encounter"], [], [], saveData["check points"])
             self.EntityManager.player = player
             for i in saveData["weapon inventory"]:
                 self.InventoryManager.addWeapon(i)
@@ -191,10 +198,138 @@ class PlantRoom(Screen):
         if selection == 4:
             return self.settings("Plant Room")
 
+class ChestRoom(Screen):
+    def run(self):
+        selection = self.InputManager.getInput(self.prompt, self.options)
+        if selection == 1:
+            clear()
+            self.EntityManager.player.canEncounter = False
+            choice = self.InputManager.getInput("Opening chest 1 you find a bottle with a strange sludge (removes effects of reading forbidden book), when leaving, you notice a hidden door in the wall.", ["1: Investigate", "2: Ignore"])
+            if choice == 1:
+                return "Broken Chest Room"
+            if choice == 2:
+                return "Plant Room"
+        if selection == 2:
+            clear()
+            choice = self.InputManager.getInput("When you try to open the chest, it leaps towards you and trys to attack you.", ["1: Attack it", "2: Run away"])
+            if choice == 1:
+                self.EntityManager.player.additionalDamage += 2
+                self.InputManager.printResult("You attack it and kill it, you now feel more confident with your abilities (+2 permanent damage), you find a passegway behind the chest and continue through it.")
+                return "Village"
+            if choice == 2:
+                self.InputManager.printResult("You run away and end up back in the plant room.")
+                return "Plant Room"
+        if selection == 3:
+            self.InventoryManager.addPet("Dox Pet")
+            self.InputManager.printResult("Opening this chest you find a small white fox with deer horns napping in it. The Dox Pet joins you and becomes your friend.")
+            return "Plant Room"
+        if selection == 4:
+            return "Plant Room"
+        if selection == 5:
+            return self.settings("Chest Room")
+
+class BrokenChestRoom(Screen):
+    def run(self):
+        selection = self.InputManager.getInput(self.prompt, self.options)
+        if selection == 1:
+            self.InventoryManager.addPet("Dragon Fruit Pet")
+            self.InputManager.printResult("When you open this chest you find what looks like a dragon fruit. Realizing you are starving, you try to eat it. When attempting to eat it, it unfolds into a small dragon with the patterns of a dragonfruit.")
+            return "Broken Chest Room"
+        if selection == 2:
+            clear()
+            choice = self.InputManager.getInput("When you start unlocking this chest it moves suddenly away and slides into the wall, revealing a hidden ladder.", ["1: Go down the ladder", "2: Walk away"])
+            if choice == 1:
+                self.InputManager.printResult("The ladder leads you down until there is a sudden and large drop. You drop down and end up in the cneter of a village right above a trapdoor leading downwards.")
+                return "Village Center Trapdoor"
+            if choice == 2:
+                return "Broken Chest Room"
+        if selection == 3:
+            return "Chest Room"
+        if selection == 4:
+            return self.settings("Broken Chest Room")
+
+class CrackInWall(Screen):
+    def run(self):
+        selection = self.InputManager.getInput(self.prompt, self.options)
+        if selection == 1:
+            self.InputManager.printResult("When you try to resist the darkness you can feel is sapping your energy until you can't resist anymore. Now with the darkness leading you, you hear a thungering roar before finding an exit and leaving the crack in the wall.")
+            return "Dark Room"
+        if selection == 2:
+            self.InputManager.printResult("Letting the darkness lead you, you hear a thundering roar before finding your way out of the crack in the wall.")
+            return "Dark Room"
+
+class ExperimentRoom(Screen):
+    def run(self):
+        selection = self.InputManager.getInput(self.prompt, self.options)
+        if selection == 1:
+            clear()
+            choice = self.InputManager.getInput("Opening the cabinets you find several empty glass bottles, and one with a small spirit traped inside.", ["1: Release the spirit (+ Spirit Pet)", "2: Keep the spirit trapped (+ Encounter possibilities)"])
+            if choice == 1:
+                self.InventoryManager.addPet("Spirit Pet")
+                self.InputManager.printResult("You release the spirit and it joins you, You now get a better look and it is a small pale ghost. You continue out of the room.")
+                return "Village"
+            if choice == 2:
+                self.EntityManager.player.canEncounter = True
+                self.InputManager.printResult("You keep the spirit trapped and put the bottle back, then continue out of the room.")
+                return "Village"
+        if selection == 2:
+            self.EntityManager.player.weaponInventory = []
+            self.EntityManager.player.petInventory = []
+            self.InputManager.printResult("Climbing the ladder a rock suddenly falls and slices your bad open, dropping all your loot. At the top of the ladder you exit and find youself in the catacombs entrance.")
+            return "Catacombs Entrance"
+        if selection == 3:
+            return self.settings("Experiment Room")
+
+class Village(Screen):
+    def run(self):
+        selection = self.InputManager.getInput(self.prompt, self.options)
+        if selection == 1:
+            return "Weaponsmith"
+        if selection == 2:
+            return "Pet Keeper"
+        if selection == 3:
+            self.EntityManager.player.checkPoints = ["1: Go to catacombs entrance", "2: Go to dark room", "3: Go to plant room", "4: Walk away", "5: Options"]
+            return "Shady Alley Man"
+        if selection == 4:
+            return self.settings("Village")
+
+class ShadyAlleyMan(Screen):
+    def run(self):
+        selection = self.InputManager.getInput(self.prompt, self.EntityManager.player.checkPoints)
+        if selection == len(self.EntityManager.player.checkPoints) - 1:
+            return "Village"
+        if selection == len(self.EntityManager.player.checkPoints):
+            return self.settings("Shady Alley Man")
+        if selection == 1:
+            return "Catacombs Entrance"
+        if selection == 2:
+            return "Dark Room"
+        if selection == 3:
+            return "Plant Room"
+
+class Weaponsmith(Screen):
+    def run(self):
+        selection = self.InputManager.getInput(self.prompt, self.options)
+        if selection == 1:
+            if chance(40):
+                self.InventoryManager.addWeapon("Glowing Sword")
+                self.InputManager.printResult("The weaponsmith agrees to give you the Glowing Sword to aid you on your journey. However, he promptly kicks you out before you can try to get more.")
+                return "Village"
+            else:
+                self.InputManager.printResult("He does not giv eyou the sword and instead kicks you out.")
+                return "Village"
+        if selection == 2:
+            if chance(50):
+                self.InventoryManager.addWeapon("Shiny Dagger")
+                self.InputManager.printResult("You steal the dagger without him noticing, then immediately leave.")
+                return "Village"
+            else:
+                self.InputManager.printResult("He catches you trying to steal the dagger and kicks you out.")
+                return "Village"
+
 
 class ScreenManager:
     def __init__(self, InputManager, ClassManager, EntityManager, InventoryManager):
-        
         self.InputManager = InputManager
         self.ClassManager = ClassManager
         self.EntityManager = EntityManager
@@ -209,7 +344,14 @@ class ScreenManager:
             "Library": Library("Now in the library you look through the shelves, but most of them are empyty. You find two books, one labeled the Forbidden Book, and one with no label, that appears to be ancient.", ["1: Read forbidden book", "2: Read ancient book", "3: Options"], self.InputManager, self.ClassManager, self.EntityManager, self.InventoryManager),
             "Goblin Hideout": GoblinHideout("You find yourself in a large area with lots of path to explore.", ["1: Loot", "2: Continue through the room", "3: Options"], self.InputManager, self.ClassManager, self.EntityManager, self.InventoryManager),
             "Living Chambers": LivingChambers("You enter the living chambers and find a dark creature seemingly made of shadows. You must act fast before it notices you.", ["1: Attack with your fists", "2: Retreat before it notices you", "3: Sneak attack", "4: Options"], self.InputManager, self.ClassManager, self.EntityManager, self.InventoryManager),
-            "Plant Room": PlantRoom("You find yourself in a room overgrown with plants. There are two small room attached, one labeled Chest Room, and one labeled Experiment Room. You also notice a small crack in the wall, barely big enough to fit through, that eads to darkness.", ["1: Enter Chest Room", "2: Enter Experiment Room", "3: Enter crack in the wall", "4: Options"], self.InputManager, self.ClassManager, self.EntityManager, self.InventoryManager)
+            "Plant Room": PlantRoom("You find yourself in a room overgrown with plants. There are two small room attached, one labeled Chest Room, and one labeled Experiment Room. You also notice a small crack in the wall, barely big enough to fit through, that eads to darkness.", ["1: Enter Chest Room", "2: Enter Experiment Room", "3: Enter crack in the wall", "4: Options"], self.InputManager, self.ClassManager, self.EntityManager, self.InventoryManager),
+            "Chest Room": ChestRoom("In the chest room you find three chests.", ["1: Loot chest 1", "2: Loot chest 2", "3: Loot chest 3", "4: Return to the plant room", "5: Options"], self.InputManager, self.ClassManager, self.EntityManager, self.InventoryManager),
+            "Broken Chest Room": BrokenChestRoom("Leving through the hidden door you find a part of the catacombs which has fallen into more disrepair. It seems to be a second chest room, identical but with only 2 chests.", ["1: Loot chest 1", "2: Loot chest 2", "3: Return to main chest room", "4: Options"], self.InputManager, self.ClassManager, self.EntityManager, self.InventoryManager),
+            "Crack In Wall": CrackInWall("After sliding into the crack you find an empty room, when you try to leave you find that the crack is gone and you are in complete darkness. Sliding you hands against the entire room to find an exit, you find that there is none. Suddenly, the darkness begins to pull you.", ["1: Resist the darkness", "2: Follow the darkness"], self.InputManager, self.ClassManager, self.EntityManager, self.InventoryManager),
+            "Experiment Room": ExperimentRoom("In the experiment room you see a ladder and many cabinets.", ["1: Open the cabinets", "2: Climb the ladder", "3: Options"], self.InputManager, self.ClassManager, self.EntityManager, self.InventoryManager),
+            "Village": Village("You find yourself in what seems to be a village built into the tombs and walls of the catacombs. The village is filled with friendly-looking monsters.", ["1: Go to the weaponsmith", "2: Go to the pet keeper", "3: Talk to the shady man in the alley", "4: Options"], self.InputManager, self.ClassManager, self.EntityManager, self.InventoryManager),
+            "Shady Alley Man": ShadyAlleyMan("I know my way around the catacombs better than anyone else. I can help you between the layers.", [], self.InputManager, self.ClassManager, self.EntityManager, self.InventoryManager),
+            "Weaponsmith": Weaponsmith("You greet the weaponsmith and take a look around his shop.", ["1: Negotiate for a Glowing Sword, 40% chance for him to accept", "2: Steal a Shiny Dagger", "3: Options"], self.InputManager, self.ClassManager, self.EntityManager, self.InventoryManager)
         }
 
     def runScreen(self, screenName):
