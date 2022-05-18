@@ -1,5 +1,6 @@
 import json
 import random
+from re import L
 from inputs import clear
 
 def chance(percent):
@@ -127,7 +128,7 @@ class RightTunnel(Screen):
             self.InputManager.printResult("You go around the tomb and continue on your way.")
             return "Dark Room"
         if selection == 2:
-            self.InventoryManager.addWeapon("Rusty Knife")
+            self.InventoryManager.addWeapon("rusty_knife")
             self.InputManager.printResult("You find a Rusty Knife and go around the tomb.")
             return "Dark Room"
         if selection == 3:
@@ -162,7 +163,7 @@ class GoblinHideout(Screen):
     def run(self):
         selection = self.InputManager.getInput(self.prompt, self.options)
         if selection == 1:
-            self.InventoryManager.addWeapon("Silver Sword")
+            self.InventoryManager.addWeapon("silver_sword")
             self.InputManager.printResult("You go into the treasure room and find a large number of chests. You open one and find a Silver Sword. You then continue on your way.")
             return "Plant Room"
         if selection == 2:
@@ -312,7 +313,7 @@ class Weaponsmith(Screen):
         selection = self.InputManager.getInput(self.prompt, self.options)
         if selection == 1:
             if chance(40):
-                self.InventoryManager.addWeapon("Glowing Sword")
+                self.InventoryManager.addWeapon("glowing_sword")
                 self.InputManager.printResult("The weaponsmith agrees to give you the Glowing Sword to aid you on your journey. However, he promptly kicks you out before you can try to get more.")
                 return "Village"
             else:
@@ -320,13 +321,50 @@ class Weaponsmith(Screen):
                 return "Village"
         if selection == 2:
             if chance(50):
-                self.InventoryManager.addWeapon("Shiny Dagger")
+                self.InventoryManager.addWeapon("shiny_dagger")
                 self.InputManager.printResult("You steal the dagger without him noticing, then immediately leave.")
                 return "Village"
             else:
                 self.InputManager.printResult("He catches you trying to steal the dagger and kicks you out.")
                 return "Village"
 
+class PetKeeper(Screen):
+    def run(self):
+        selection = self.InputManager.getInput(self.prompt, self.options)
+        if selection == 1:
+            pets = ["dark_sludge", "dox_pet", "dragon_fruit_pet", "spirit_pet"]
+            pet = random.choice(pets)
+            self.InventoryManager.addPet(pet)
+            self.InputManager.printResult(f"You got a {self.InventoryManager.getPetName(pet)}")
+            return "Village"
+        if selection == 2:
+            self.InputManager.printResult("You: Whats been going on in the village?")
+            self.InputManager.printResult("Pet Kepper: There's been this kids around the village that no one likes.")
+            self.InputManager.printResult("You: Wow I hate that kid")
+            self.InputManager.printResult("Pet Keeper: Me too. We are now friends I decided.")
+
+            self.InputManager.printResult("After befriending the pet keeper, she tells you about a trapdoor that leads to a secret level of the catacombs.")
+            return "Village Center Trapdoor"
+        if selection == 3:
+            return self.settings("Pet Keeper")
+
+class VillageCenterTrapdoor(Screen):
+    def ruin(self):
+        selection = self.InputManager.getInput(self.prompt, self.options)
+        if selection == 1:
+            return "Flooded Catacombs"
+        if selection == 2:
+            return "Village"
+        if selection == 3:
+            return self.settings("Flooded Catacombs")
+
+class FloodedCatacombs(Screen):
+    def run(self):
+        #Currently unplanned. Will add input once we know what to do here.
+        #selection = self.InputManager.getInput(self.prompt, self.options)
+
+        self.InputManager.printResult("Going down the ladder you find a sign saying 'Path not finished go back' and you listen.")
+        return "Village Center Trapdoor"
 
 class ScreenManager:
     def __init__(self, InputManager, ClassManager, EntityManager, InventoryManager):
@@ -351,7 +389,9 @@ class ScreenManager:
             "Experiment Room": ExperimentRoom("In the experiment room you see a ladder and many cabinets.", ["1: Open the cabinets", "2: Climb the ladder", "3: Options"], self.InputManager, self.ClassManager, self.EntityManager, self.InventoryManager),
             "Village": Village("You find yourself in what seems to be a village built into the tombs and walls of the catacombs. The village is filled with friendly-looking monsters.", ["1: Go to the weaponsmith", "2: Go to the pet keeper", "3: Talk to the shady man in the alley", "4: Options"], self.InputManager, self.ClassManager, self.EntityManager, self.InventoryManager),
             "Shady Alley Man": ShadyAlleyMan("I know my way around the catacombs better than anyone else. I can help you between the layers.", [], self.InputManager, self.ClassManager, self.EntityManager, self.InventoryManager),
-            "Weaponsmith": Weaponsmith("You greet the weaponsmith and take a look around his shop.", ["1: Negotiate for a Glowing Sword, 40% chance for him to accept", "2: Steal a Shiny Dagger", "3: Options"], self.InputManager, self.ClassManager, self.EntityManager, self.InventoryManager)
+            "Weaponsmith": Weaponsmith("You greet the weaponsmith and take a look around his shop.", ["1: Negotiate for a Glowing Sword, 40% chance for him to accept", "2: Steal a Shiny Dagger", "3: Options"], self.InputManager, self.ClassManager, self.EntityManager, self.InventoryManager),
+            "Pet Keeper": PetKeeper("You go into the pet keeper's shop and say hello.", ["1: Get a random pet from the upper floors", "2: Befriend the pet keeper", "3: Options"], self.InputManager, self.ClassManager, self.EntityManager, self.InventoryManager),
+            "Village Center Trapdoor": VillageCenterTrapdoor("You find yourself at a trapdoor in the center of the village.", ["1: Open the trapdoor and go down the ladder underneath", "2: Walk away into the village", "3: Options"], self.InputManager, self.ClassManager, self.EntityManager, self.InventoryManager)
         }
 
     def runScreen(self, screenName):

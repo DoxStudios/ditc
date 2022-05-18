@@ -1,6 +1,7 @@
 class Item:
-    def __init__(self, name, canHaveMultiple=True, damage=None, damageType=None):
+    def __init__(self, name, id, canHaveMultiple, damage, damageType):
         self.name = name
+        self.id = id
         self.canHaveMultiple = canHaveMultiple
         self.damage = damage
         self.damageType = damageType
@@ -8,17 +9,17 @@ class Item:
 class ItemManager:
     def __init__(self):
         self.Items = {
-            "Rusty Knife": Item("Rusty Knife", damage=2, damageType="melee"),
-            "Silver Sword": Item("Silver Sword", damage=5, damageType="melee"),
-            "Glowing Sword": Item("Glowing Sword", damage=9, damageType="melee"),
-            "Shiny Dagger": Item("Shiny Dagger", damage=4, damageType="melee")
+            "rusty_knife": Item("Rusty Knife", "rusty_knife", True, 2, "melee"),
+            "silver_sword": Item("Silver Sword", "silver_sword", True, 5, "melee"),
+            "glowing_sword": Item("Glowing Sword", "glowing_sword", True, 9, "melee"),
+            "shiny_dagger": Item("Shiny Dagger", "shiny_dagger", True, 4, "melee")
         }
 
         self.Pets = {
-            "Dark Sludge": Item("Dark Sludge", False, 2, "spell"),
-            "Dox Pet": Item("Dox Pet", False, 3, "ranged"),
-            "Dragon Fruit Pet": Item("Dragon Fruit Pet", False, 8, "static"),
-            "Spirit Pet": Item("Spirit Pet", False, 4, "spell")
+            "dark_sludge_pet": Item("Dark Sludge Pet", "dark_sludge_pet", False, 2, "spell"),
+            "dox_pet": Item("Dox Pet", "dox_pet", False, 3, "ranged"),
+            "dragon_fruit_pet": Item("Dragon Fruit Pet", "dragon_fruit_pet", False, 8, "static"),
+            "spirit_pet": Item("Spirit Pet", "spirit_pet", False, 4, "spell")
         }
 
 class InventoryManager:
@@ -41,6 +42,9 @@ class InventoryManager:
 
         return card
 
+    def getWeaponName(self, id):
+        return self.itemManager.Items[id].name
+
     def getPetInventory(self):
         return self.entityManager.player.petInventory
 
@@ -55,6 +59,9 @@ class InventoryManager:
             card += i + "\n"
 
         return card
+
+    def getPetName(self, id):
+        return self.itemManager.Pets[id].name
 
     def addWeapon(self, itemName):
         weaponInventory = self.getWeaponInventory()
