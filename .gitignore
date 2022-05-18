@@ -1,2 +1,3 @@
 *.json
+.replit
 __pycache__/
