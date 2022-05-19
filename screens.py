@@ -186,7 +186,7 @@ class LivingChambers(Screen):
             self.InputManager.printResult("You retreat without it noticing you and end up back in the dark room.")
             return "Dark Room"
         if selection == 3:
-            self.InventoryManager.addPet("Dark Sludge")
+            self.InventoryManager.addPet("dark_sludge_pet")
             self.InputManager.printResult("After slaying the dark creature you see a small show block wants to join you. You pick it up and it begins flaoting along with you. You continue along your way.")
             return "Plant Room"
         if selection == 4:
@@ -226,7 +226,7 @@ class ChestRoom(Screen):
                 self.InputManager.printResult("You run away and end up back in the plant room.")
                 return "Plant Room"
         if selection == 3:
-            self.InventoryManager.addPet("Dox Pet")
+            self.InventoryManager.addPet("dox_pet")
             self.InputManager.printResult("Opening this chest you find a small white fox with deer horns napping in it. The Dox Pet joins you and becomes your friend.")
             return "Plant Room"
         if selection == 4:
@@ -238,7 +238,7 @@ class BrokenChestRoom(Screen):
     def run(self):
         selection = self.InputManager.getInput(self.prompt, self.options)
         if selection == 1:
-            self.InventoryManager.addPet("Dragon Fruit Pet")
+            self.InventoryManager.addPet("dragon_fruit_pet")
             self.InputManager.printResult("When you open this chest you find what looks like a dragon fruit. Realizing you are starving, you try to eat it. When attempting to eat it, it unfolds into a small dragon with the patterns of a dragonfruit.")
             return "Broken Chest Room"
         if selection == 2:
@@ -271,7 +271,7 @@ class ExperimentRoom(Screen):
             clear()
             choice = self.InputManager.getInput("Opening the cabinets you find several empty glass bottles, and one with a small spirit traped inside.", ["1: Release the spirit (+ Spirit Pet)", "2: Keep the spirit trapped (+ Encounter possibilities)"])
             if choice == 1:
-                self.InventoryManager.addPet("Spirit Pet")
+                self.InventoryManager.addPet("spirit_pet")
                 self.InputManager.printResult("You release the spirit and it joins you, You now get a better look and it is a small pale ghost. You continue out of the room.")
                 return "Village"
             if choice == 2:
