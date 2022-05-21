@@ -354,7 +354,7 @@ class PetKeeper(Screen):
             return self.settings("Pet Keeper")
 
 class VillageCenterTrapdoor(Screen):
-    def ruin(self):
+    def run(self):
         selection = self.InputManager.getInput(self.prompt, self.options)
         if selection == 1:
             return "Flooded Catacombs"
