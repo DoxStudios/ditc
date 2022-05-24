@@ -36,27 +36,24 @@ class Archer:
         self.sanityBuff = 20
         self.addedDamage = 5
 
-class Temp:
+class Wizard:
     def __init__(self):
         self.damageMultipliers = {
             "melee": 2,
-            "ranged": 0.5,
-            "spell": 0.25
+            "ranged": 2,
+            "spell": 0
         }
 
         self.defense = {
-            "melee": 0.25,
-            "ranged": 0.5,
-            "spell": 1.25
+            "melee": 00,
+            "ranged": 0,
+            "spell": 10
         }
 
-        self.healthBuff = 20
+        self.healthBuff = -20
         self.hungerBuff = 0
-        self.sanityBuff = -20
-        self.addedDamage = 10
-
-
-
+        self.sanityBuff = 50
+        self.addedDamage = 0
 
 
 class ClassManager:
@@ -64,7 +61,7 @@ class ClassManager:
         self.classes = {
             "1": Barbarian(),
             "2": Archer(),
-            "3": Temp()
+            "3": Wizard()
         }
         
 

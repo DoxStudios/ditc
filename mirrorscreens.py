@@ -8,7 +8,7 @@ def chance(percent):
     else:
         return False
 
-debug=True
+debug=False
 
 class Screen:
     def __init__(self, prompt, options, InputManager, ClassManager, EntityManager, InventoryManager):

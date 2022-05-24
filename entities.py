@@ -1,8 +1,5 @@
-from tabnanny import check
-
-
 class Player:
-    def __init__(self, name="Player", health=100, hunger=100, sanity=100, damageMultipliers={"melee": 1, "ranged": 1, "spell": 1}, additionalDamage=0, defense={"melee": 1, "ranged": 1, "spell": 1}, currentScreen="Main Menu", canEncounter=False, weaponInventory=[], petInventory=[], checkPoints=[]):
+    def __init__(self, name="Player", health=100, hunger=100, sanity=100, damageMultipliers={"melee": 1, "ranged": 1, "spell": 1}, additionalDamage=0, defense={"melee": 1, "ranged": 1, "spell": 1}, currentScreen="Main Menu", canEncounter=False, weaponInventory=[], petInventory=[], checkPoints=[], mirrored=False):
         self.name = name
         self.health = health
         self.hunger = hunger
@@ -15,6 +12,7 @@ class Player:
         self.weaponInventory = weaponInventory
         self.petInventory = petInventory
         self.checkPoints = checkPoints
+        self.mirrored = mirrored
 
     def damage(self, damage, damageType):
         self.health -= damage * self.defenseValues[damageType]
@@ -46,16 +44,16 @@ class Player:
             "can encounter": self.canEncounter,
             "weapon inventory": weaponNames,
             "pet inventory": petNames,
-            "check points": self.checkPoints
+            "check points": self.checkPoints,
+            "mirrored": self.mirrored
         }
 
         return stats
 
 class EntityManager:
-
     def __init__(self):
         self.player = Player()
 
-    def createPlayerEntity(self, name="Player", health=100, hunger=100, sanity=100, damageMultipliers={"melee": 1, "ranged": 1, "spell": 1}, additionalDamage=0, defense={"melee": 1, "ranged": 1, "spell": 1}, currentScreen="Main Menu", canEncounter=False, weaponInventory=[], petInventory=[], checkPoints=[]):
-        player = Player(name, health, hunger, sanity, damageMultipliers, additionalDamage, defense, currentScreen, canEncounter, weaponInventory, petInventory, checkPoints)
+    def createPlayerEntity(self, name="Player", health=100, hunger=100, sanity=100, damageMultipliers={"melee": 1, "ranged": 1, "spell": 1}, additionalDamage=0, defense={"melee": 1, "ranged": 1, "spell": 1}, currentScreen="Main Menu", canEncounter=False, weaponInventory=[], petInventory=[], checkPoints=[], mirrored=False):
+        player = Player(name, health, hunger, sanity, damageMultipliers, additionalDamage, defense, currentScreen, canEncounter, weaponInventory, petInventory, checkPoints, mirrored)
         return player
