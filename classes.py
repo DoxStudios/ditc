@@ -39,15 +39,15 @@ class Archer:
 class Wizard:
     def __init__(self):
         self.damageMultipliers = {
+            "melee": 0,
+            "ranged": 0,
+            "spell": 10
+        }
+        
+        self.defense = {
             "melee": 2,
             "ranged": 2,
             "spell": 0
-        }
-
-        self.defense = {
-            "melee": 00,
-            "ranged": 0,
-            "spell": 10
         }
 
         self.healthBuff = -20

@@ -14,7 +14,7 @@ class ItemManager:
         self.Items = {
             "rusty_knife": Item("Rusty Knife", "rusty_knife", True, 2, "melee", 2, 2, True),
             "silver_sword": Item("Silver Sword", "silver_sword", True, 5, "melee", 0, 0, True),
-            "glowing_sword": Item("Glowing Sword", "glowing_sword", True, 9, "melee", 5, 5, True),
+            "glowing_sword": Item("Glowing Sword", "glowing_sword", True, 9, "spell", 5, 5, True),
             "shiny_dagger": Item("Shiny Dagger", "shiny_dagger", True, 4, "melee", 4, 4, True)
         }
 
