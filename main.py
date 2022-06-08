@@ -4,7 +4,7 @@ import inputs
 import screens
 import inventory
 
-alive = True
+running = True
 
 inputManager = inputs.InputManager()
 classManager = classes.ClassManager()
@@ -12,9 +12,13 @@ entityManager = entities.EntityManager()
 inventoryManager = inventory.InventoryManager(entityManager)
 screenManager = screens.ScreenManager(inputManager, classManager, entityManager, inventoryManager)
 
-screenManager.runScreen("Main Menu")
+if screenManager.runScreen("Main Menu") == "":
+    running = False
 
-while alive:
+while running:
     player = entityManager.player
     screenManager.clear()
-    player.currentScreen = screenManager.runScreen(player.currentScreen)    
+    if player.currentScreen == "":
+        running = False
+    else:
+        player.currentScreen = screenManager.runScreen(player.currentScreen)

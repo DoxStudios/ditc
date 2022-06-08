@@ -101,7 +101,7 @@ class MainMenu(Screen):
             return self.getCharacterName()
         if selection == 3:
             clear()
-            exit()
+            return ""
 
 
 class CatacombsEntrance(Screen):
