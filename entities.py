@@ -53,6 +53,7 @@ class Player:
 class EntityManager:
     def __init__(self):
         self.player = Player()
+        self.debug = True
 
     def createPlayerEntity(self, name="Player", health=100, hunger=100, sanity=100, damageMultipliers={"melee": 1, "ranged": 1, "spell": 1}, additionalDamage=0, defense={"melee": 1, "ranged": 1, "spell": 1}, currentScreen="Main Menu", canEncounter=False, weaponInventory=[], petInventory=[], checkPoints=[], mirrored=False):
         player = Player(name, health, hunger, sanity, damageMultipliers, additionalDamage, defense, currentScreen, canEncounter, weaponInventory, petInventory, checkPoints, mirrored)

@@ -59,11 +59,11 @@ class Wizard:
 class ClassManager:
     def __init__(self):
         self.classes = {
-            "1": Barbarian(),
-            "2": Archer(),
-            "3": Wizard()
+            1: Barbarian(),
+            2: Archer(),
+            3: Wizard()
         }
-        
+
 
     def getClass(self, classNumber):
-        return self.classes[str(classNumber)]
+        return self.classes[classNumber]
