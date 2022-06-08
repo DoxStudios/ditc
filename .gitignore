@@ -1,5 +1,7 @@
 *.json
+/build
 .replit
+main.spec
 pyproject.toml
 poetry.lock
 __pycache__/
